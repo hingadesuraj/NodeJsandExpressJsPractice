@@ -1,4 +1,5 @@
- const fs = require("fs");
+//  const fs = require("fs");
+ const chalk = require("chalk");
 
 //  create folder using fs module
 //  fs.mkdirSync("pavan");
@@ -23,3 +24,12 @@
 
 // delete folder 
 // fs.rmdirSync("pavan");
+
+// import chalk from 'chalk';
+
+// console.log(chalk.blue('Hello world!'));
+
+
+const validator = require('validator');
+
+validator.isEmail('foo@bar.com'); //=> true
