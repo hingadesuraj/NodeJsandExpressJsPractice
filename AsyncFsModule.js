@@ -37,5 +37,5 @@ const fs = require("fs");
 // fs.unlink("Async/pavan.txt",(err)=>{console.log(err)});
 
 // delete existing folder
-// fs.rmdir("Async",(err)=>{console.log(err)});
+// fs.rmdir("Async",(err)=>{console.log(err)}); 
 
