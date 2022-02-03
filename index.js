@@ -18,5 +18,8 @@
 // fs.renameSync("pavan/new.txt","pavan/new2.txt");\
 
 //delete file using fs module
-fs.unlinkSync("new2.txt");
- 
+// fs.unlinkSync("new2.txt");
+
+
+// delete folder 
+// fs.rmdirSync("pavan");
