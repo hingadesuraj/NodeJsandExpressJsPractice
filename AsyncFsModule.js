@@ -6,3 +6,7 @@ fs.writeFile("AsyncRead.txt","This is a Async fs module need callback funtion as
     console.log("callback fire")
 });
 
+//  read file data using Async fs module
+fs.readFile("AsyncRead.txt",(err,data)=>{
+    console.log(data);
+})
