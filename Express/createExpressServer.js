@@ -7,7 +7,7 @@ const PORT = 8000;
 
 
 
-// below are routes
+// below are routes and add some routing pages
 
 app.get("/",(req,res)=>{
     res.send("This is a home page ");
@@ -15,6 +15,10 @@ app.get("/",(req,res)=>{
 
 app.get("/contact",(req,res)=>{
     res.send("this is a contact us page")
+})
+
+app.get("/about",(req,res)=>{
+    res.status(200).send("this is a about  us page");
 })
 
 
