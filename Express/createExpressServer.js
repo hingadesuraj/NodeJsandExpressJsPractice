@@ -14,7 +14,23 @@ app.get("/",(req,res)=>{
 })
 
 app.get("/contact",(req,res)=>{
-    res.send("this is a contact us page")
+    res.send("this is a contact us page");
+    // send responce as a html code
+    res.send("<h1> hello bhau</h1>");
+    //  send json 
+    res.send([{
+       id:1,
+       name:"hello" 
+    },{
+        id:1,
+        name:"hello" 
+     },{
+    },{
+        id:1,
+        name:"hello" 
+     },{
+    }
+])
 })
 
 app.get("/about",(req,res)=>{
