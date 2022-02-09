@@ -2,9 +2,19 @@
 // using npm i express ;
 
 const express = require('express');
+const path = require('path');
 const app = express();
 const PORT = 8000;
 
+// serve static file of html 
+
+// console.log(__dirname);
+// console.log(path.join(__dirname,"../index.js"))
+
+const pathrequire = path.join(__dirname,"../public")
+
+app.use(express.static(pathrequire));
+// serving static file 
 
 
 // below are routes and add some routing pages
