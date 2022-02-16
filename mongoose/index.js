@@ -33,7 +33,7 @@ const newData = new mongoose.model("newData",newSchema);
 // create document or insert
 const createDocument = async () => {
     try {
-        const reactPlaylist = new playlist({
+        const reactPlaylist = new newData({
             name:"React",
             ctype:"frontend",
             videos:80,
@@ -51,3 +51,17 @@ const createDocument = async () => {
 }
 createDocument();
 
+
+// read document 
+
+const getDocumet = async () =>{
+    try{
+        const result = await Playlist.find();
+        console.log(result);
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
+getDocumet();
