@@ -5,8 +5,8 @@ const url = "mongodb://localhost:27017/student-data?readPreference=primary&appna
 const connectToMongo =    () =>{
     mongoose.connect(url,()=>{
         console.log("connect to mongodb");
-    }).then(()=>{
-        console.log("connectedd")
+    }).then(()=>{ 
+        console.log("connectedd") 
     }).catch((e)=>{
         console.log(e);
     })
