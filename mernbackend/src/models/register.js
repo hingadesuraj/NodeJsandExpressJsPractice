@@ -1,5 +1,6 @@
 const mongoose= require('mongoose')
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const employee = new mongoose.Schema({
     firstname :{
@@ -31,10 +32,37 @@ const employee = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    tokens:[{
+        token:{
+            type:String,
+            required:true
+        }
+    }]
 })
 
-// encrypt password using bcryptjs
+// generate toke using jwt
+
+
+// employee is a schema name 
+employee.methods.generateAuthToken = async function () {
+try {
+    
+    // take document id user register in database
+    // console.log(this._id);
+    // sign jwt token
+    const token = jwt.sign({_id:this._id.toString()},"surajhingadetaumarkheddistyavatmal") //sign method takes to parameter first is unique id and second is secrate code
+    this.tokens = this.tokens.concat({token});
+    await this.save();
+    return token;
+
+} catch (error) {
+    console.log(error);
+}
+}
+
+
+// encrypt password using bcryptjs {convert password into hash};
 // before the save process
 
 employee.pre("save",async function(next){

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const hbs=require('hbs')
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // database connection
 require("./db/conn"); 
 // Register is a models of schema
@@ -12,14 +13,14 @@ const port = process.env.PORT || 3000;
 
 
 //  these are the path
-const static_path =path.join(__dirname,"../public");
+const static_path =path.join(__dirname,"../public"); 
 const template_path =path.join(__dirname,"../templates/views");
 const partials_path=  path.join(__dirname,"../templates/partials");
 
 // console.log(static_path);
 
 app.use(express.json())
-app.use(express.urlencoded({extended:false}) )
+app.use(express.urlencoded({extended:false}) )   
      
 // set static pages
 app.use(express.static(static_path));
@@ -64,8 +65,11 @@ app.post("/registration", async(req,res)=>{
               
         })
 
+        // generate token 
+        const token = await  registerUser.generateAuthToken();
+        console.log(token);
 
-
+    
         const register = await registerUser.save();
         res.status(201).render("login");
          
@@ -99,6 +103,7 @@ app.post("/login",async(req,res)=>{
         const userDataFromDataBase = await Register.findOne({email:email});
 
         // use compare method of bcryptjs
+        // .compare is a bcryptjs method it takes two parameter first is user enter password and another is stored password in database to compare both are same or not 
         const isMatch = await  bcrypt.compare(password,userDataFromDataBase.password);
 
 
