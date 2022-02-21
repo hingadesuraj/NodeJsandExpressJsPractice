@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs=require('hbs')
+const bcrypt = require('bcryptjs');
 // database connection
 require("./db/conn"); 
 // Register is a models of schema
@@ -64,7 +65,7 @@ app.post("/registration", async(req,res)=>{
         })
 
 
-        
+
         const register = await registerUser.save();
         res.status(201).render("login");
          
@@ -96,10 +97,17 @@ app.post("/login",async(req,res)=>{
 
 
         const userDataFromDataBase = await Register.findOne({email:email});
+
+        // use compare method of bcryptjs
+        const isMatch = await  bcrypt.compare(password,userDataFromDataBase.password);
+
+
         // Register is a collection name
         // console.log(userDataFromDataBase);
 
-        if(userDataFromDataBase.password === password){
+        // if(userDataFromDataBase.password === password){
+            
+        if(isMatch){
             // user is match to db then user redirect to index page that means home page
             res.status(201).render("index");
         }else{
