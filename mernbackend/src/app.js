@@ -51,11 +51,11 @@ app.post("/registration", async(req,res)=>{
     const cpassword = req.body.cpassword;
 //  in form set name attribute is very important
     if(password === cpassword){
-        const registerUser = new  Register({
+        const registerUser = new  Register({ 
             firstname:req.body.fname,
             lastname:req.body.lname,
             email:req.body.email,
-            phonenumber:req.body.phone,
+            phonenumber:req.body.phone, 
             age:req.body.age,
             gender:req.body.gender,
             password:req.body.password,
@@ -63,8 +63,10 @@ app.post("/registration", async(req,res)=>{
               
         })
 
+
+        
         const register = await registerUser.save();
-        res.status(201).render("index");
+        res.status(201).render("login");
          
         
     }else{
@@ -76,7 +78,47 @@ app.post("/registration", async(req,res)=>{
  }
    
 })
+ 
+  
+// get data to verify login endpoint
+app.get("/login",(req,res)=>{
+    res.render("login")
+})
+
+
+//  check login details and redirect to home page
+
+app.post("/login",async(req,res)=>{
+
+    try {
+        const email = req.body.email;
+        const password = req.body.password;
+
+
+        const userDataFromDataBase = await Register.findOne({email:email});
+        // Register is a collection name
+        // console.log(userDataFromDataBase);
+
+        if(userDataFromDataBase.password === password){
+            // user is match to db then user redirect to index page that means home page
+            res.status(201).render("index");
+        }else{
+            res.status(401).send("Please check email or password");
+        }
+
+
+
+    } catch (error) {
+        res.status(401).send("Something went wrong");
+    }
+
+})
+
+
+
+
+
 
 app.listen(port,()=>{
     console.log(`server start on ${port}`);      
-})                   
+})                      
