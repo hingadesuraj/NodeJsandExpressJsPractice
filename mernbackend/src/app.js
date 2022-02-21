@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const path = require('path');
 const hbs=require('hbs')
@@ -65,13 +67,14 @@ app.post("/registration", async(req,res)=>{
               
         })
 
-        // generate token 
+        // generate token ----> code is avaiable on register.js page it is a middleware
         const token = await  registerUser.generateAuthToken();
-        console.log(token);
+        // console.log(token);
 
-    
+    // save data to the database
         const register = await registerUser.save();
         res.status(201).render("login");
+        
          
         
     }else{
@@ -107,8 +110,13 @@ app.post("/login",async(req,res)=>{
         const isMatch = await  bcrypt.compare(password,userDataFromDataBase.password);
 
 
-        // Register is a collection name
+        // Register --> is a collection name
         // console.log(userDataFromDataBase);
+
+        // generate token at the time of user login on page
+        // and userDataFromDataBase is a instance of schema
+        const token = await  userDataFromDataBase.generateAuthToken();
+        // console.log( `this is a token generate at the time of login ::->${token}  ` );
 
         // if(userDataFromDataBase.password === password){
             
@@ -130,8 +138,8 @@ app.post("/login",async(req,res)=>{
 
 
 
-
-
+// console.log(process.env.SECRAT_KEY);
+ 
 app.listen(port,()=>{
     console.log(`server start on ${port}`);      
 })                      
