@@ -51,7 +51,7 @@ try {
     // take document id user register in database
     // console.log(this._id);
     // sign jwt token
-    const token = jwt.sign({_id:this._id.toString()},process.env.SECRAT_KEY) //sign method takes to parameter first is unique id and second is secrate code
+    const token = jwt.sign({_id:this._id.toString()}, process.env.SECRAT_KEY) //sign method takes to parameter first is unique id and second is secrate code
 
     // save id and token in db
     this.tokens = this.tokens.concat({token});

@@ -5,6 +5,8 @@ const path = require('path');
 const hbs=require('hbs')
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const auth = require("./middleware/auth")
 // database connection
 require("./db/conn"); 
 // Register is a models of schema
@@ -22,7 +24,8 @@ const partials_path=  path.join(__dirname,"../templates/partials");
 // console.log(static_path);
 
 app.use(express.json())
-app.use(express.urlencoded({extended:false}) )   
+app.use(express.urlencoded({extended:false}) )  
+app.use(cookieParser()) ;
      
 // set static pages
 app.use(express.static(static_path));
@@ -40,6 +43,42 @@ app.get("/",(req,res)=>{
     res.render("index");    
 
 }) 
+app.get("/secrate", auth ,(req,res)=>{  
+    // console.log(`The created cookie fetch form browser ${req.cookies.jwt}`);           
+    res.render("secrate");    
+
+}) 
+
+app.get("/logout", auth , async (req,res)=>{  
+      try{
+        // console.log(req.user);
+
+        // for single place logout 
+
+        // req.user.tokens= req.user.tokens.filter((currentElement)=>{
+        //     return currentElement.token !== req.token;
+        // })
+
+        // for all devices logout at one click like netflix
+        req.user.tokens = [];
+
+
+        // cleare cookie
+        
+        res.clearCookie("jwt");
+        // console.log("logout successfully");
+
+        // save user after  delete
+        await req.user.save();
+        // render page login 
+          res.render("login");    
+      } catch(error){
+          res.status(401).send(error); 
+      }
+
+})  
+
+
 app.get("/registration",(req,res)=>{
  
     res.render("register")
@@ -70,6 +109,14 @@ app.post("/registration", async(req,res)=>{
         // generate token ----> code is avaiable on register.js page it is a middleware
         const token = await  registerUser.generateAuthToken();
         // console.log(token);
+
+
+        //  set cookie in brower at the time of registration
+
+        res.cookie("jwt",token,{
+            expires:new Date(Date.now() + 300000),
+            httpOnly:true
+        })
 
     // save data to the database
         const register = await registerUser.save();
@@ -118,7 +165,13 @@ app.post("/login",async(req,res)=>{
         const token = await  userDataFromDataBase.generateAuthToken();
         // console.log( `this is a token generate at the time of login ::->${token}  ` );
 
-        // if(userDataFromDataBase.password === password){
+      //  set cookie in brower at the time of registration
+ 
+      res.cookie("jwt",token,{
+        expires:new Date(Date.now() + 3000000),
+        httpOnly:true,
+        // secure:true
+    })
             
         if(isMatch){
             // user is match to db then user redirect to index page that means home page
@@ -142,4 +195,4 @@ app.post("/login",async(req,res)=>{
  
 app.listen(port,()=>{
     console.log(`server start on ${port}`);      
-})                      
+})                         
